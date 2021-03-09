@@ -1,0 +1,11 @@
+Implement matrix operations
+- matrix class
+- matrix functions ( using matrix api )
+
+User I/O
+- Display menu (command line)
+- sanitized inputs
+
+
+- aft impl matrix, enumerate functions, make new class based on each operation, can do text encoding\
+- pickle encoding if not enough time
