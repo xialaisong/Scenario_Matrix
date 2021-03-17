@@ -57,7 +57,7 @@ class Matrix:
     def swap_row(self, row_i_1: int, row_i_2: int):
         tmp = self.matrix[row_i_1]
         self.matrix[row_i_1] = self.matrix[row_i_2]
-        self.matrix[row_i_2] = self.matrix[row_i_1]
+        self.matrix[row_i_2] = tmp
 
     def get_submatrix(self, row_i: int, col_i: int):
         submatrix = [[None for i in range(self.row_num - 1)] for j in range(self.col_num - 1)]
@@ -132,4 +132,50 @@ class Matrix:
             for c_i in self.matrix[r_i]:
                 self.matrix[r_i][c_i] *= coeff
 
+        def transposition(self):
+        ls = [[None for i in range(self.row_num)] for j in range(self.col_num)]
+        for i in self.matrix:
+            for j in self.matrix[i]:
+                ls[i][j] = self.get_item(j,i)
+        return Matrix(ls)
 
+    def get_sub(self, mat):
+        # check sizes of matrices match
+        if not (self.row_num == mat.get_row_num() and self.col_num == mat.get_col_num()):
+            # might need to throw exception here
+            return None
+
+        ls = [[None for i in range(self.row_num)] for j in range(self.col_num)]
+        for i in range(self.row_num):
+            for j in range(self.col_num):
+                ls[i][j] = self.get_item(i, j) - mat.get_item(i, j)
+        return Matrix(ls)
+
+    def det(self):
+        r = self.row_num
+        if r != self.col_num:
+            return None
+        elif r == 1:
+            return self.matrix
+        else:
+            s = 0
+            for i in range(r):
+                m = self.matrix
+                self.matrix = self.get_submatrix(0,i)
+                s += m[0][i] * self.det() * (-1) ** (i % 2)
+            return s
+
+
+    def mult_matrix(self,mat):
+        if self.col_num != mat.get_row_num():
+            return None
+        ls = [[0 for i in range(self.row_num)] for j in range(mat.get_col_num)]
+        ri = self.row_num
+        c2 = mat.get_col_num
+        c1 = self.col_num
+        for i in range(ri):
+            for j in range(c2):
+                for k in range(c1):
+                    ls[i][j] = ls[i][j]+self.get_item(i,k)*mat.get_item(k, j)
+
+        return Matrix(ls)
