@@ -1,10 +1,13 @@
+from cl import *
+
 def Menu_main ():
     argument = GetArg()
     switcher = {
         "1": "Op",
         "2": "Det",
         "3": "Eig",
-        "4": exit()
+        "4": "IO",
+        "5": "exit"
     }
 
     return switcher.get(argument, "Invalid, please retry")
@@ -25,8 +28,7 @@ def Menu_Det():
     argument = GetArg()
     switcher = {
         "1": "2x2",
-        "2": "3x3",
-        "3": "Break"
+        "2": "Break"
     }
 
     return switcher.get(argument, "Invalid, please retry")
@@ -42,32 +44,51 @@ def Menu_eigenvalue():
 
     return switcher.get(argument, "Invalid, please retry")
 
+def Menu_IO():
+    argument = GetArg();
+    switcher = {
+        1: "Import",
+        2: "Export",
+        3: "Break"
+    }
+
+    return switcher.get(argument, "Invalid, please retry")
 
 def Go ():
     while True:
         printMenu_main()
-        if Menu_main() == "Op":
+        key = Menu_main()
+        if key == "Op":
             while True:
+
                 printMenu_op()
-                if Menu_operation() == "Break":
+                key_op = Menu_operation()
+                if key_op == "Break":
                     break
-                elif Menu_operation() == "Invalid, please retry":
+                elif key_op == "Add":
+                    Mat1 = GetUserMat()
+                    Mat2 = GetUserMat()
+                    print(Mat1.get_sum(Mat2))
+                elif key_op == "Invalid, please retry":
                     print(Menu_operation())
-        if Menu_main() == "Det":
+        elif key == "Det":
             while True:
                 printMenu_Det()
-                if Menu_Det() == "Break":
+                key_det = Menu_Det()
+                if key_det == "Break":
                     break
-                elif Menu_Det() == "Invalid, please retry":
+                elif key_det == "Invalid, please retry":
                     print(Menu_Det())
-        if Menu_main() == "Eig":
+        elif key == "Eig":
             while True:
                 printMenu_Eig()
                 if Menu_eigenvalue() == "Break":
                     break
                 elif Menu_eigenvalue() == "Invalid, please retry":
                     print(Menu_eigenvalue())
-        if Menu_main() == "Invalid, please retry":
+        elif key == "exit":
+            exit();
+        else:
             print("Invalid, please retry")
 
 
@@ -76,8 +97,9 @@ def printMenu_main():
     print("Welcome to Matrix Practice system Ver 1.0.0")
     print("1: Basic Matrix Operation Practice")
     print("2: Determinant Operation Practice")
-    print("3: File IO Function Menu")
-    print("4: Quit the System")
+    print("3: Eigenvalue/Eigenvector Operation Practice")
+    print("4: File IO Function Menu")
+    print("5: Quit the System")
     print("Enter number to start corresponding practice")
     print("Invalid number will loop back to main menu")
     return
@@ -87,25 +109,33 @@ def printMenu_op():
     print("1: Do Add Operation")
     print("2: Do Minus Operation")
     print("3: Do Multiply Operation")
-    print("4: Do Devide Operation")
+    print("4: Do Divide Operation")
     print("5: Quit to Main Menu")
     print("Enter number to start corresponding practice")
     print("Invalid number will loop back to this menu")
     return
 
 def printMenu_Det():
-    print("This is the sub menu of operation practice")
-    print("1: Do 2x2 Determinant Operation")
-    print("2: Do 3x3 Determinant Operation")
-    print("3: Quit to Main Menu")
+    print("This is the sub menu of determinant practice")
+    print("1: Do Determinant Operation")
+    print("2: Quit to Main Menu")
     print("Enter number to start corresponding practice")
     print("Invalid number will loop back to this menu")
     return
 
 def printMenu_Eig():
-    print("This is the sub menu of operation practice")
+    print("This is the sub menu of Eigenvalue/vector practice")
     print("1: Do Eigenvalue Operation")
     print("2: Do Eigenvector Operation")
+    print("3: Quit to Main Menu")
+    print("Enter number to start corresponding practice")
+    print("Invalid number will loop back to this menu")
+    return
+
+def printMenu_IO():
+    print("This is the sub menu of imported practice")
+    print("1: Import exercise")
+    print("2: Export exercise")
     print("3: Quit to Main Menu")
     print("Enter number to start corresponding practice")
     print("Invalid number will loop back to this menu")
@@ -114,5 +144,23 @@ def printMenu_Eig():
 def GetArg():
     value = input("Please enter a number:\n")
     return value
+
+def GetUserMat():
+    print("Please Enter 3 if doing 3x3 matrix")
+    print("Or Enter 2 if doing 2x2 matrix")
+    deci = GetArg()
+    if deci == "3":
+        firstrow = [int(input()),int(input()),int(input())]
+        secondrow = [int(input()),int(input()),int(input())]
+        thirdrow = [int(input()),int(input()),int(input())]
+        Matrix = [firstrow,secondrow,thirdrow]
+    elif deci == "2":
+        firstrow = [int(input()), int(input())]
+        secondrow = [int(input()), int(input())]
+        Matrix = [firstrow, secondrow]
+         
+    return a
+
+
 
 Go()
