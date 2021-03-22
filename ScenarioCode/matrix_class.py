@@ -3,35 +3,23 @@ from typing import List
 import mypy
 
 
-
-
 class Matrix:
 
     def __init__(self, ls_2d: list):
         # ls_2d as a 2-dimensional list
-        self.matrix = {}
+        # rows, then columns - self.matrix[i][j] is row i, column j
+        self.matrix = ls_2d.copy()
 
         # column number fixed as len of ls_2d
         self.col_num = len(ls_2d)
-        # decl max_row_len
-        max_row_len = -1
+        if self.col_num == 0:
+            # no elements in this matrix
+            print("matrix has no elements")
+        self.row_num = len(ls_2d[0])
 
-        # iterate through ls_2d
-        for i in range(len(ls_2d)):
-            # row as current row in ls_2d
-            row = ls_2d[i]
-            # initialise dict in self.matrix[i]
-            self.matrix[i] = {}
-            # iterate through row, if row[j] not 0 then add key/value pair to dict
-            for j in range(len(row)):
-                if row[j] != 0:
-                    self.matrix[i][j] = row[j]
-
-            # since ls_2d may be ragged, size of matrix row length is max len of rows in ls_2d
-            if len(row) > max_row_len:
-                max_row_len = len(row)
-
-        self.row_num = max_row_len
+    def __copy__(self):
+        mat = Matrix(self.matrix)
+        return mat
 
     def get_row_num(self) -> int:
         return self.row_num
@@ -44,12 +32,7 @@ class Matrix:
         if not self.is_valid_index(row_i, col_i):
             return None
 
-        # if key exists in that row, return its value
-        if col_i in self.matrix[row_i]:
-            return self.matrix[row_i][col_i]
-        # ow, it must be a 0
-        else:
-            return 0
+        return self.matrix[row_i][col_i]
 
     def is_valid_index(self, row_i: int, col_i: int) -> bool:
         return self.row_num > row_i >= 0 and self.col_num > col_i >= 0
@@ -85,10 +68,7 @@ class Matrix:
         print(self.matrix.keys())
 
     def get_row(self, row_i: int) -> list:
-        ls = [0 for i in range(self.col_num)]
-        for key in self.matrix[row_i]:
-            ls[key] = self.get_item(row_i, key)
-        return ls
+        return self.matrix[row_i].copy()
 
     def get_col(self, col_i: int) -> list:
         ls = [0 for i in range(self.row_num)]
@@ -96,21 +76,17 @@ class Matrix:
             ls[key] = self.get_item(key, col_i)
         return ls
 
-    def get_product(self, mat): # should ensure type here is a Matrix object):
-        # check sizes of matrices match
-        if not (self.row_num == mat.get_col_num() and self.col_num == mat.get_row_num()):
-            # might need to throw exception here
+    def get_product(self, mat):  # should ensure type here is a Matrix object):
+        if self.col_num != mat.get_row_num():
             return None
-
-        ls = [[None for i in range(self.row_num)] for j in range(mat.get_col_num())]
-        for i in range(self.row_num):
-            row = self.get_row(i)
-            for j in range(mat.get_col_num()):
-                col = mat.get_col(j)
-                acc = 0
-                for k in range(len(row)):
-                    acc += row[k] * col[k]
-                ls[i][j] = acc
+        ls = [[0 for i in range(self.row_num)] for j in range(mat.get_col_num)]
+        ri = self.row_num
+        c2 = mat.get_col_num
+        c1 = self.col_num
+        for i in range(ri):
+            for j in range(c2):
+                for k in range(c1):
+                    ls[i][j] = ls[i][j] + self.get_item(i, k) * mat.get_item(k, j)
 
         return Matrix(ls)
 
@@ -131,5 +107,10 @@ class Matrix:
         for r_i in self.matrix:
             for c_i in self.matrix[r_i]:
                 self.matrix[r_i][c_i] *= coeff
+
+    def get_sub(self, mat):
+        neg_mat = mat.copy().mult_scalar(-1)
+        return self.get_sum(neg_mat)
+
 
 
