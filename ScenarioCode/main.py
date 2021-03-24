@@ -1,4 +1,9 @@
 from cl import *
+import sys
+
+# global variables needed to change input streams
+normal_stdin = sys.stdin
+file = None
 
 def Menu_main ():
     argument = GetArg()
@@ -142,7 +147,7 @@ def printMenu_IO():
     return
 
 def GetArg():
-    value = input("Please enter a number:\n")
+    value = input("Please enter a number:")
     return value
 
 def GetUserMat():
@@ -161,6 +166,11 @@ def GetUserMat():
          
     return a
 
+def setFileStream():
+    sys.stdin = file
+
+def setUserStream():
+    sys.stdin = normal_stdin
 
 
 Go()
