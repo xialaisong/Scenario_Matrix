@@ -1,4 +1,6 @@
 from cl import *
+from display import *
+from matrix_class import *
 
 def Menu_main ():
     argument = GetArg()
@@ -68,7 +70,7 @@ def Go ():
                 elif key_op == "Add":
                     Mat1 = GetUserMat()
                     Mat2 = GetUserMat()
-                    print(Mat1.get_sum(Mat2))
+                    Mat1.get_sum(Mat2).show
                 elif key_op == "Invalid, please retry":
                     print(Menu_operation())
         elif key == "Det":
@@ -148,18 +150,9 @@ def GetArg():
 def GetUserMat():
     print("Please Enter 3 if doing 3x3 matrix")
     print("Or Enter 2 if doing 2x2 matrix")
-    deci = GetArg()
-    if deci == "3":
-        firstrow = [int(input()),int(input()),int(input())]
-        secondrow = [int(input()),int(input()),int(input())]
-        thirdrow = [int(input()),int(input()),int(input())]
-        Matrix = [firstrow,secondrow,thirdrow]
-    elif deci == "2":
-        firstrow = [int(input()), int(input())]
-        secondrow = [int(input()), int(input())]
-        Matrix = [firstrow, secondrow]
-         
-    return a
+    deci = int(GetArg())
+    matrix = input_dis(deci)
+    return matrix
 
 
 
