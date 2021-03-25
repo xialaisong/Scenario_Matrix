@@ -64,9 +64,6 @@ class Matrix:
                 print(self.get_item(i, j), end="\t")
             print("")
 
-    def show_keys(self):
-        print(self.matrix.keys())
-
     def get_row(self, row_i: int) -> list:
         return self.matrix[row_i].copy()
 
