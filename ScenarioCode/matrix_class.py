@@ -25,7 +25,7 @@ class Matrix:
     def get_item(self, row_i: int, col_i: int):
         # check that indexes are valid
         if not self.is_valid_index(row_i, col_i):
-            raise Exception("invalid index")
+            raise IndexError("invalid index")
 
         return self.matrix[row_i][col_i]
 
@@ -49,14 +49,21 @@ class Matrix:
                     curr_col_i = j
                 else:
                     curr_col_i = j + 1
-                submatrix[i][j] = self.get_item(curr_row_i, curr_col_i)
+                try:
+                    submatrix[i][j] = self.get_item(curr_row_i, curr_col_i)
+                except IndexError:
+                    print("invalid indexes")
+
         return Matrix(submatrix)
 
     def show(self):
         print("Showing a matrix")
         for i in range(self.row_num):
             for j in range(self.col_num):
-                print(self.get_item(i, j), end="\t")
+                try:
+                    print(self.get_item(i, j), end="\t")
+                except IndexError:
+                    print("invalid indexes")
             print("")
 
     def get_row(self, row_i: int) -> list:
@@ -65,7 +72,10 @@ class Matrix:
     def get_col(self, col_i: int) -> list:
         ls = [0 for i in range(self.row_num)]
         for i in range(self.row_num):
-            ls[i] = self.get_item(i, col_i)
+            try:
+                ls[i] = self.get_item(i, col_i)
+            except IndexError:
+                print("invalid indexes")
         return ls
 
     def get_product(self, mat):  # should ensure type here is a Matrix object):
@@ -78,20 +88,25 @@ class Matrix:
         for i in range(ri):
             for j in range(c2):
                 for k in range(c1):
-                    ls[i][j] = ls[i][j] + self.get_item(i, k) * mat.get_item(k, j)
+                    try:
+                        ls[i][j] = ls[i][j] + self.get_item(i, k) * mat.get_item(k, j)
+                    except IndexError:
+                        print("invalid indexes")
 
         return Matrix(ls)
 
     def get_sum(self, mat):
         # check sizes of matrices match
         if not (self.row_num == mat.get_row_num() and self.col_num == mat.get_col_num()):
-            # might need to throw exception here
-            return None
+            raise Exception("unmatched sizes")
 
         ls = [[None for i in range(self.row_num)] for j in range(self.col_num)]
         for i in range(self.row_num):
             for j in range(self.col_num):
-                ls[i][j] = self.get_item(i, j) + mat.get_item(i, j)
+                try:
+                    ls[i][j] = self.get_item(i, j) + mat.get_item(i, j)
+                except IndexError:
+                    print("invalid indexes")
 
         return Matrix(ls)
 
@@ -102,4 +117,9 @@ class Matrix:
 
     def get_sub(self, mat):
         neg_mat = mat.copy().mult_scalar(-1)
-        return self.get_sum(neg_mat)
+        val = 0
+        try:
+            val = self.get_sum(neg_mat)
+        except Exception as e:
+            print(e)
+        return val
