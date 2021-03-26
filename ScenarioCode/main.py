@@ -104,7 +104,8 @@ def Go ():
                 elif key_det == "2x2":
                     print("Please Enter one Matrix to calculate Determinant")
                     Mat = GetUserMat()
-                    print("The Determinant of the Matrix is: "+Mat.det())
+                    i = Mat.det()
+                    print("The Determinant of the Matrix is: "+i)
                 elif key_det == "Invalid, please retry":
                     print(Menu_Det())
         elif key == "Eig":
