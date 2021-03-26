@@ -1,8 +1,3 @@
-from typing import List
-
-import mypy
-
-
 class Matrix:
 
     def __init__(self, ls_2d: list):
@@ -11,11 +6,11 @@ class Matrix:
         self.matrix = ls_2d.copy()
 
         # column number fixed as len of ls_2d
-        self.col_num = len(ls_2d)
+        self.col_num: int = len(ls_2d)
         if self.col_num == 0:
             # no elements in this matrix
             print("matrix has no elements")
-        self.row_num = len(ls_2d[0])
+        self.row_num: int = len(ls_2d[0])
 
     def __copy__(self):
         mat = Matrix(self.matrix)
@@ -30,7 +25,7 @@ class Matrix:
     def get_item(self, row_i: int, col_i: int):
         # check that indexes are valid
         if not self.is_valid_index(row_i, col_i):
-            return None
+            raise IndexError("invalid index")
 
         return self.matrix[row_i][col_i]
 
@@ -40,7 +35,7 @@ class Matrix:
     def swap_row(self, row_i_1: int, row_i_2: int):
         tmp = self.matrix[row_i_1]
         self.matrix[row_i_1] = self.matrix[row_i_2]
-        self.matrix[row_i_2] = self.matrix[row_i_1]
+        self.matrix[row_i_2] = tmp
 
     def get_submatrix(self, row_i: int, col_i: int):
         submatrix = [[None for i in range(self.row_num - 1)] for j in range(self.col_num - 1)]
@@ -54,63 +49,77 @@ class Matrix:
                     curr_col_i = j
                 else:
                     curr_col_i = j + 1
-                submatrix[i][j] = self.get_item(curr_row_i, curr_col_i)
+                try:
+                    submatrix[i][j] = self.get_item(curr_row_i, curr_col_i)
+                except IndexError:
+                    print("invalid indexes")
+
         return Matrix(submatrix)
 
     def show(self):
         print("Showing a matrix")
         for i in range(self.row_num):
             for j in range(self.col_num):
-                print(self.get_item(i, j), end="\t")
+                try:
+                    print(self.get_item(i, j), end="\t")
+                except IndexError:
+                    print("invalid indexes")
             print("")
-
-    def show_keys(self):
-        print(self.matrix.keys())
 
     def get_row(self, row_i: int) -> list:
         return self.matrix[row_i].copy()
 
     def get_col(self, col_i: int) -> list:
         ls = [0 for i in range(self.row_num)]
-        for key in self.matrix:
-            ls[key] = self.get_item(key, col_i)
+        for i in range(self.row_num):
+            try:
+                ls[i] = self.get_item(i, col_i)
+            except IndexError:
+                print("invalid indexes")
         return ls
 
     def get_product(self, mat):  # should ensure type here is a Matrix object):
         if self.col_num != mat.get_row_num():
             return None
-        ls = [[0 for i in range(self.row_num)] for j in range(mat.get_col_num)]
+        ls = [[0 for i in range(self.row_num)] for j in range(mat.get_col_num())]
         ri = self.row_num
-        c2 = mat.get_col_num
+        c2 = mat.get_col_num()
         c1 = self.col_num
         for i in range(ri):
             for j in range(c2):
                 for k in range(c1):
-                    ls[i][j] = ls[i][j] + self.get_item(i, k) * mat.get_item(k, j)
+                    try:
+                        ls[i][j] = ls[i][j] + self.get_item(i, k) * mat.get_item(k, j)
+                    except IndexError:
+                        print("invalid indexes")
 
         return Matrix(ls)
 
     def get_sum(self, mat):
         # check sizes of matrices match
         if not (self.row_num == mat.get_row_num() and self.col_num == mat.get_col_num()):
-            # might need to throw exception here
-            return None
+            raise Exception("unmatched sizes")
 
         ls = [[None for i in range(self.row_num)] for j in range(self.col_num)]
         for i in range(self.row_num):
             for j in range(self.col_num):
-                ls[i][j] = self.get_item(i, j) + mat.get_item(i, j)
+                try:
+                    ls[i][j] = self.get_item(i, j) + mat.get_item(i, j)
+                except IndexError:
+                    print("invalid indexes")
 
         return Matrix(ls)
 
     def mult_scalar(self, coeff: int):
-        for r_i in self.matrix:
-            for c_i in self.matrix[r_i]:
-                self.matrix[r_i][c_i] *= coeff
+        for row in self.matrix:
+            for c_i in range(len(row)):
+                row[c_i] *= coeff
 
     def get_sub(self, mat):
         neg_mat = mat.copy().mult_scalar(-1)
-        return self.get_sum(neg_mat)
-
-
-
+        val = 0
+        try:
+            val = self.get_sum(neg_mat)
+        except Exception as e:
+            print(e)
+        return val
