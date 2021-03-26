@@ -1,6 +1,11 @@
 from cl import *
 from display import *
 from matrix_class import *
+import sys
+
+# global variables needed to change input streams
+normal_stdin = sys.stdin
+file = None
 
 def Menu_main ():
     argument = GetArg()
@@ -20,7 +25,7 @@ def Menu_operation ():
         "1": "Add",
         "2": "Minus",
         "3": "Multiply",
-        "4": "Divide",
+        "4": "Mult Scalar",
         "5": "Break"
     }
 
@@ -57,12 +62,12 @@ def Menu_IO():
     return switcher.get(argument, "Invalid, please retry")
 
 def Go ():
+    print()
     while True:
         printMenu_main()
         key = Menu_main()
         if key == "Op":
             while True:
-
                 printMenu_op()
                 key_op = Menu_operation()
                 if key_op == "Break":
@@ -70,7 +75,24 @@ def Go ():
                 elif key_op == "Add":
                     Mat1 = GetUserMat()
                     Mat2 = GetUserMat()
-                    Mat1.get_sum(Mat2).show
+                    Mat1.get_sum(Mat2).show()
+                elif key_op == "Minus":
+                    Mat1 = GetUserMat()
+                    Mat2 = GetUserMat()
+                    Mat1.get_sub(Mat2).show()
+                elif key_op == "Multiply":
+                    Mat1 = GetUserMat()
+                    Mat2 = GetUserMat()
+                    Mat1.get_product(Mat2).show()
+                elif key_op == "Mult Scalar":
+                    Mat1 = GetUserMat()
+                    Mat2 = GetArg()
+                    try:
+                        Mat2 = int(Mat2)
+                    except ValueError as e:
+                        print("The input is Invalid")
+                    else:
+                        Mat1.mult_scalar(Mat2).show()
                 elif key_op == "Invalid, please retry":
                     print(Menu_operation())
         elif key == "Det":
@@ -79,6 +101,10 @@ def Go ():
                 key_det = Menu_Det()
                 if key_det == "Break":
                     break
+                elif key_det == "2x2":
+                    print("Please Enter one Matrix to calculate Determinant")
+                    Mat = GetUserMat()
+                    print("The Determinant of the Matrix is: "+Mat.det())
                 elif key_det == "Invalid, please retry":
                     print(Menu_Det())
         elif key == "Eig":
@@ -110,8 +136,8 @@ def printMenu_op():
     print("This is the sub menu of operation practice")
     print("1: Do Add Operation")
     print("2: Do Minus Operation")
-    print("3: Do Multiply Operation")
-    print("4: Do Divide Operation")
+    print("3: Do Multiply Matrix Operation")
+    print("4: Do Multiply Scalar Operation")
     print("5: Quit to Main Menu")
     print("Enter number to start corresponding practice")
     print("Invalid number will loop back to this menu")
@@ -144,16 +170,23 @@ def printMenu_IO():
     return
 
 def GetArg():
-    value = input("Please enter a number:\n")
+    print()
+    value = input("Please enter a number:")
     return value
 
 def GetUserMat():
+    print()
     print("Please Enter 3 if doing 3x3 matrix")
     print("Or Enter 2 if doing 2x2 matrix")
     deci = int(GetArg())
     matrix = input_dis(deci)
     return matrix
 
+def setFileStream():
+    sys.stdin = file
+
+def setUserStream():
+    sys.stdin = normal_stdin
 
 
 Go()
