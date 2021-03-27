@@ -116,7 +116,15 @@ def Go ():
                 elif Menu_eigenvalue() == "Invalid, please retry":
                     print(Menu_eigenvalue())
         elif key == "exit":
-            exit();
+            exit()
+        elif key == "IO":
+            while True:
+                printMenu_IO()
+                key_Io = Menu_IO()
+                if key_Io == "Break":
+                    break
+                elif key_Io == "Invalid, please retry":
+                    printMenu_IO()
         else:
             print("Invalid, please retry")
 
