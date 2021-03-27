@@ -6,7 +6,7 @@ import sys
 # global variables needed to change input streams
 normal_stdin = sys.stdin
 file = None
-global a
+global store
 store = []
 
 def Menu_main ():
