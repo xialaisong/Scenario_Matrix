@@ -15,6 +15,7 @@ def input_dis(N):     #num of row
         if len(a[i]) != len(a[i+1]):
             print('different number of column')
             return -1
+    return a
     print(a)
 
 #input_dis(3)
