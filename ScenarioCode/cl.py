@@ -1,5 +1,7 @@
 from typing import List
-#import mypy
+
+
+# import mypy
 
 class Matrix:
 
@@ -92,7 +94,7 @@ class Matrix:
             ls[key] = self.get_item(key, col_i)
         return ls
 
-    def get_product(self, mat): # should ensure type here is a Matrix object):
+    def get_product(self, mat):  # should ensure type here is a Matrix object):
         # check sizes of matrices match
         if not (self.row_num == mat.get_col_num() and self.col_num == mat.get_row_num()):
             # might need to throw exception here
@@ -103,10 +105,8 @@ class Matrix:
             row = self.get_row(i)
             for j in range(mat.get_col_num()):
                 col = mat.get_col(j)
-                acc = 0
                 for k in range(len(row)):
-                    acc += row[k] * col[k]
-                ls[i][j] = acc
+                    ls[i][j] += row[k] * col[k]
 
         return Matrix(ls)
 
@@ -123,21 +123,16 @@ class Matrix:
 
         return Matrix(ls)
 
-
     def mult_scalar(self, coeff: int):
         for r_i in self.matrix:
             for c_i in self.matrix[r_i]:
                 self.matrix[r_i][c_i] *= coeff
 
-
-
-
-
     def transposition(self):
         ls = [[None for i in range(self.row_num)] for j in range(self.col_num)]
         for i in self.matrix:
             for j in self.matrix[i]:
-                ls[i][j] = self.get_item(j,i)
+                ls[i][j] = self.get_item(j, i)
         return Matrix(ls)
 
     def get_sub(self, mat):
@@ -162,12 +157,11 @@ class Matrix:
             s = 0
             for i in range(r):
                 m = self.matrix
-                self.matrix = self.get_submatrix(0,i)
+                self.matrix = self.get_submatrix(0, i)
                 s += m[0][i] * self.det() * (-1) ** (i % 2)
             return s
 
-
-    def mult_matrix(self,mat):
+    def mult_matrix(self, mat):
         if self.col_num != mat.get_row_num():
             return None
         ls = [[0 for i in range(self.row_num)] for j in range(mat.get_col_num)]
@@ -177,6 +171,6 @@ class Matrix:
         for i in range(ri):
             for j in range(c2):
                 for k in range(c1):
-                    ls[i][j] = ls[i][j]+self.get_item(i,k)*mat.get_item(k, j)
+                    ls[i][j] = ls[i][j] + self.get_item(i, k) * mat.get_item(k, j)
 
         return Matrix(ls)

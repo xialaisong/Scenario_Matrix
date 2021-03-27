@@ -6,6 +6,8 @@ for i in range(5):             #row
         print(a)
 '''
 
+from matrix_class import Matrix
+
 
 def input_dis(N):     #num of row
     print('N=', N)
@@ -15,6 +17,7 @@ def input_dis(N):     #num of row
         if len(a[i]) != len(a[i+1]):
             print('different number of column')
             return -1
+    return Matrix(a)
     print(a)
 
 #input_dis(3)
@@ -40,4 +43,4 @@ def output_dis(output):
                 print(item + ' '*(n+4-len(item)), end='')
             print('\n')
 
-output_dis([[1, 2, 3], [1, 3, 4], [1, 1000, 3]])
+# output_dis([[1, 2, 3], [1, 3, 4], [1, 1000, 3]])

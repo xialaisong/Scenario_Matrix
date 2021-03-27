@@ -1,0 +1,7 @@
+bugs
+- sum should not ask for size second time
+	- might need to tweak getusermat to take an integer, and ask for integer before calling getusermat
+- matrices are not sanitized to be 2x2 or 3x3 strictly
+	- 
+- add secret 6,7 options as check for answer and comment 
+	- could even be 99 or 100 or some weirdly specific number to prevent user input

@@ -22,7 +22,7 @@ class Matrix:
     def get_col_num(self) -> int:
         return self.col_num
 
-    def get_item(self, row_i: int, col_i: int):
+    def get_item(self, row_i: int, col_i: int) -> int:
         # check that indexes are valid
         if not self.is_valid_index(row_i, col_i):
             raise IndexError("invalid index")
@@ -95,9 +95,15 @@ class Matrix:
 
         return Matrix(ls)
 
-    def get_sum(self, mat):
+    def size_is_same(self, mat):
         # check sizes of matrices match
         if not (self.row_num == mat.get_row_num() and self.col_num == mat.get_col_num()):
+            raise Exception("unmatched sizes")
+
+    def get_sum(self, mat):
+        try:
+            self.size_is_same(mat)
+        except Exception as e:
             raise Exception("unmatched sizes")
 
         ls = [[None for i in range(self.row_num)] for j in range(self.col_num)]
@@ -115,6 +121,13 @@ class Matrix:
             for c_i in range(len(row)):
                 row[c_i] *= coeff
 
+    def transposition(self):
+        ls = [[None for i in range(self.row_num)] for j in range(self.col_num)]
+        for i in self.matrix:
+            for j in self.matrix[i]:
+                ls[i][j] = self.get_item(j, i)
+        return Matrix(ls)
+
     def get_sub(self, mat):
         neg_mat = mat.copy().mult_scalar(-1)
         val = 0
@@ -123,3 +136,28 @@ class Matrix:
         except Exception as e:
             print(e)
         return val
+
+    def is_equal(self, mat):
+        try:
+            self.size_is_same(mat)
+        except Exception as e:
+            raise Exception("sizes unmatched")
+
+        for i in range(self.row_num):
+            for j in range(self.col_num):
+                if self.get_item(i, j) != mat.get_item(i, j):
+                    return False
+        return True
+
+    def det(self) -> int:
+        r = self.row_num
+        if r != self.col_num:
+            raise Exception("called det on square matrix")
+        elif r == 1:
+            return self.get_item(0,0)
+        else:
+            s = 0
+            for i in range(r):
+                m = self.get_submatrix(0,i)
+                s += m.det() * self.get_item(0,i) * ((-1) ** (i % 2))
+            return s
