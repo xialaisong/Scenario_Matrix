@@ -6,6 +6,8 @@ import sys
 # global variables needed to change input streams
 normal_stdin = sys.stdin
 file = None
+global a
+store = []
 
 def Menu_main ():
     argument = GetArg()
@@ -16,7 +18,7 @@ def Menu_main ():
         "4": "IO",
         "5": "exit"
     }
-
+    store.append(int(argument))
     return switcher.get(argument, "Invalid, please retry")
 
 def Menu_operation ():
@@ -28,7 +30,7 @@ def Menu_operation ():
         "4": "Mult Scalar",
         "5": "Break"
     }
-
+    store.append(int(argument))
     return switcher.get(argument, "Invalid, please retry")
 
 def Menu_Det():
@@ -37,7 +39,7 @@ def Menu_Det():
         "1": "2x2",
         "2": "Break"
     }
-
+    store.append(int(argument))
     return switcher.get(argument, "Invalid, please retry")
 
 
@@ -48,7 +50,7 @@ def Menu_eigenvalue():
         "2": "EigenVector",
         "3": "Break"
     }
-
+    store.append(int(argument))
     return switcher.get(argument, "Invalid, please retry")
 
 def Menu_IO():
@@ -58,7 +60,7 @@ def Menu_IO():
         2: "Export",
         3: "Break"
     }
-
+    store.append(int(argument))
     return switcher.get(argument, "Invalid, please retry")
 
 def Go ():
@@ -181,6 +183,7 @@ def printMenu_IO():
 def GetArg():
     print()
     value = input("Please enter a number:")
+    store.append(int(value))
     return value
 
 def GetUserMat():
@@ -188,7 +191,9 @@ def GetUserMat():
     print("Please Enter 3 if doing 3x3 matrix")
     print("Or Enter 2 if doing 2x2 matrix")
     deci = int(GetArg())
+    store.append(int(deci))
     matrix = input_dis(deci)
+    store.append(matrix)
     return matrix
 
 def setFileStream():
